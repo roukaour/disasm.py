@@ -15,7 +15,7 @@
 ENTRY_POINT:
 	ld sp, $fffe                                      ; 0000: 31 fe ff
 	ld a, $2                                          ; 0003: 3e 02
-	jp Function007c                                   ; 0005: c3 7c 00
+	jp Main                                           ; 0005: c3 7c 00
 
 Unknown_0008:
 	db $d3, $00, $98, $a0, $12, $d3, $00, $80         ; 0008-000f
@@ -44,13 +44,13 @@ Unknown_0072:
 Unknown_007a:
 	db $58, $43                                       ; 007a-007b
 
-Function007c:
+Main:
 	ld [rSVBK], a                                     ; 007c: e0 70
 ; a = the color number's mappings
 	ld a, $fc                                         ; 007e: 3e fc
 ; initialize the palette
 	ld [rBGP], a                                      ; 0080: e0 47
-	call Function0275                                 ; 0082: cd 75 02
+	call InitAudio                                    ; 0082: cd 75 02
 	call Function0200                                 ; 0085: cd 00 02
 	ld h, $d0                                         ; 0088: 26 d0
 	call Function0203                                 ; 008a: cd 03 02
@@ -159,12 +159,13 @@ Function0203:
 	jr z, .loop                                       ; 0207: 28 fb
 	ret                                               ; 0209: c9
 
-Function020a:
+CopyBytes:
+; Copy c bytes from hl to de.
 	ld a, [hli]                                       ; 020a: 2a
 	ld [de], a                                        ; 020b: 12
 	inc de                                            ; 020c: 13
 	dec c                                             ; 020d: 0d
-	jr nz, Function020a                               ; 020e: 20 fa
+	jr nz, CopyBytes                                  ; 020e: 20 fa
 	ret                                               ; 0210: c9
 
 Function0211:
@@ -253,7 +254,7 @@ Function0262:
 	pop bc                                            ; 0273: c1
 	ret                                               ; 0274: c9
 
-Function0275:
+InitAudio:
 	ld a, $80                                         ; 0275: 3e 80
 	ld [rNR52], a                                     ; 0277: e0 26
 	ld [rNR11], a                                     ; 0279: e0 11
@@ -384,8 +385,8 @@ Function033e:
 	ld hl, Unknown_0008                               ; 033e: 21 08 00
 Function0341:
 	ld de, $ff51                                      ; 0341: 11 51 ff
-	ld c, $5                                          ; 0344: 0e 05
-	call Function020a                                 ; 0346: cd 0a 02
+	ld c, 5                                           ; 0344: 0e 05
+	call CopyBytes                                    ; 0346: cd 0a 02
 	ret                                               ; 0349: c9
 
 Function034a:
@@ -577,7 +578,7 @@ Function03f0:
 	ld [rVBK], a                                      ; 043a: e0 4f
 	ld hl, $98c2                                      ; 043c: 21 c2 98
 	ld a, $8                                          ; 043f: 3e 08
-.loop:
+.loop1:
 	ld [hli], a                                       ; 0441: 22
 	inc a                                             ; 0442: 3c
 	cp $18                                            ; 0443: fe 18
@@ -589,7 +590,7 @@ Function03f0:
 	ld hl, $9902                                      ; 044d: 21 02 99
 .skip2:
 	cp $38                                            ; 0450: fe 38
-	jr nz, .loop                                      ; 0452: 20 ed
+	jr nz, .loop1                                     ; 0452: 20 ed
 	ld hl, Unknown_08d8                               ; 0454: 21 d8 08
 	ld de, $d840                                      ; 0457: 11 40 d8
 	ld b, 8                                           ; 045a: 06 08
@@ -599,8 +600,8 @@ Function03f0:
 	inc de                                            ; 045f: 13
 	ld [de], a                                        ; 0460: 12
 	inc de                                            ; 0461: 13
-	ld c, $2                                          ; 0462: 0e 02
-	call Function020a                                 ; 0464: cd 0a 02
+	ld c, 2                                           ; 0462: 0e 02
+	call CopyBytes                                    ; 0464: cd 0a 02
 	ld a, $0                                          ; 0467: 3e 00
 	ld [de], a                                        ; 0469: 12
 	inc de                                            ; 046a: 13
@@ -615,66 +616,65 @@ Function03f0:
 	ld hl, $014b                                      ; 0475: 21 4b 01
 	ld a, [hl]                                        ; 0478: 7e
 	cp $33                                            ; 0479: fe 33
-	jr nz, Function0488                               ; 047b: 20 0b
+	jr nz, .skip3                                     ; 047b: 20 0b
 	ld l, $44                                         ; 047d: 2e 44
 	ld e, $30                                         ; 047f: 1e 30
 	ld a, [hli]                                       ; 0481: 2a
 	cp e                                              ; 0482: bb
-	jr nz, Function04ce                               ; 0483: 20 49
+	jr nz, .finish1                                   ; 0483: 20 49
 	inc e                                             ; 0485: 1c
-	jr Function048c                                   ; 0486: 18 04
-Function0488:
+	jr .continue                                      ; 0486: 18 04
+.skip3:
 	ld l, $4b                                         ; 0488: 2e 4b
 	ld e, $1                                          ; 048a: 1e 01
-Function048c:
+.continue:
 	ld a, [hli]                                       ; 048c: 2a
 	cp e                                              ; 048d: bb
-	jr nz, Function04ce                               ; 048e: 20 3e
+	jr nz, .finish1                                   ; 048e: 20 3e
 	ld l, $34                                         ; 0490: 2e 34
-	ld bc, $10                                        ; 0492: 01 10 00
-Function0495:
+	ld bc, 16                                         ; 0492: 01 10 00
+do_16_2:
 	ld a, [hli]                                       ; 0495: 2a
 	add b                                             ; 0496: 80
 	ld b, a                                           ; 0497: 47
 	dec c                                             ; 0498: 0d
-	jr nz, Function0495                               ; 0499: 20 fa
+	jr nz, do_16_2                                    ; 0499: 20 fa
 	ld [$d000], a                                     ; 049b: ea 00 d0
 	ld hl, Unknown_06c7                               ; 049e: 21 c7 06
 	ld c, $0                                          ; 04a1: 0e 00
-Function04a3:
+.do_79:
 	ld a, [hli]                                       ; 04a3: 2a
 	cp b                                              ; 04a4: b8
-	jr z, Function04af                                ; 04a5: 28 08
+	jr z, .break                                      ; 04a5: 28 08
 	inc c                                             ; 04a7: 0c
 	ld a, c                                           ; 04a8: 79
-	cp $4f                                            ; 04a9: fe 4f
-	jr nz, Function04a3                               ; 04ab: 20 f6
-	jr Function04ce                                   ; 04ad: 18 1f
-
-Function04af:
+	cp 79                                             ; 04a9: fe 4f
+	jr nz, .do_79                                     ; 04ab: 20 f6
+	jr .finish1                                       ; 04ad: 18 1f
+.break:
 	ld a, c                                           ; 04af: 79
 	sub $41                                           ; 04b0: d6 41
-	jr c, Function04d0                                ; 04b2: 38 1c
+	jr c, .finish2                                    ; 04b2: 38 1c
 	ld hl, Unknown_0716                               ; 04b4: 21 16 07
 	ld d, $0                                          ; 04b7: 16 00
 	ld e, a                                           ; 04b9: 5f
 	add hl, de                                        ; 04ba: 19
-Function04bb:
+.loop2:
 	ld a, [$0137]                                     ; 04bb: fa 37 01
 	ld d, a                                           ; 04be: 57
 	ld a, [hl]                                        ; 04bf: 7e
 	cp d                                              ; 04c0: ba
-	jr z, Function04d0                                ; 04c1: 28 0d
+	jr z, .finish2                                    ; 04c1: 28 0d
 	ld de, $e                                         ; 04c3: 11 0e 00
 	add hl, de                                        ; 04c6: 19
 	ld a, c                                           ; 04c7: 79
 	add e                                             ; 04c8: 83
 	ld c, a                                           ; 04c9: 4f
 	sub $5e                                           ; 04ca: d6 5e
-	jr c, Function04bb                                ; 04cc: 38 ed
-Function04ce:
+	jr c, .loop2                                      ; 04cc: 38 ed
+.finish1:
 	ld c, $0                                          ; 04ce: 0e 00
-Function04d0:
+.finish2:
 	ld hl, Unknown_0733                               ; 04d0: 21 33 07
 	ld b, $0                                          ; 04d3: 06 00
 	add hl, bc                                        ; 04d5: 09
@@ -696,44 +696,44 @@ Function04e9:
 	ld a, [$d00b]                                     ; 04ef: fa 0b d0
 	ld b, a                                           ; 04f2: 47
 	ld c, $1e                                         ; 04f3: 0e 1e
-Function04f5:
+.loop:
 	bit 0, b                                          ; 04f5: cb 40
-	jr nz, Function04fb                               ; 04f7: 20 02
+	jr nz, .skip1                                     ; 04f7: 20 02
 	inc de                                            ; 04f9: 13
 	inc de                                            ; 04fa: 13
-Function04fb:
+.skip1:
 	ld a, [de]                                        ; 04fb: 1a
 	ld [hli], a                                       ; 04fc: 22
-	jr nz, Function0501                               ; 04fd: 20 02
+	jr nz, .skip2                                     ; 04fd: 20 02
 	dec de                                            ; 04ff: 1b
 	dec de                                            ; 0500: 1b
-Function0501:
+.skip2:
 	bit 1, b                                          ; 0501: cb 48
-	jr nz, Function0507                               ; 0503: 20 02
+	jr nz, .skip3                                     ; 0503: 20 02
 	inc de                                            ; 0505: 13
 	inc de                                            ; 0506: 13
-Function0507:
+.skip3:
 	ld a, [de]                                        ; 0507: 1a
 	ld [hli], a                                       ; 0508: 22
 	inc de                                            ; 0509: 13
 	inc de                                            ; 050a: 13
-	jr nz, Function050f                               ; 050b: 20 02
+	jr nz, .skip4                                     ; 050b: 20 02
 	dec de                                            ; 050d: 1b
 	dec de                                            ; 050e: 1b
-Function050f:
+.skip4:
 	bit 2, b                                          ; 050f: cb 50
-	jr z, Function0518                                ; 0511: 28 05
+	jr z, .skip5                                      ; 0511: 28 05
 	dec de                                            ; 0513: 1b
 	dec hl                                            ; 0514: 2b
 	ld a, [de]                                        ; 0515: 1a
 	ld [hli], a                                       ; 0516: 22
 	inc de                                            ; 0517: 13
-Function0518:
+.skip5:
 	ld a, [de]                                        ; 0518: 1a
 	ld [hli], a                                       ; 0519: 22
 	inc de                                            ; 051a: 13
 	dec c                                             ; 051b: 0d
-	jr nz, Function04f5                               ; 051c: 20 d7
+	jr nz, .loop                                      ; 051c: 20 d7
 	ld hl, $d900                                      ; 051e: 21 00 d9
 	ld de, $da00                                      ; 0521: 11 00 da
 	call Function0564                                 ; 0524: cd 64 05
@@ -749,10 +749,10 @@ Function0528:
 	add hl, bc                                        ; 0533: 09
 	ld de, $d840                                      ; 0534: 11 40 d8
 	ld b, $8                                          ; 0537: 06 08
-Function0539:
+.loop:
 	push hl                                           ; 0539: e5
-	ld c, $2                                          ; 053a: 0e 02
-	call Function020a                                 ; 053c: cd 0a 02
+	ld c, 2                                           ; 053a: 0e 02
+	call CopyBytes                                    ; 053c: cd 0a 02
 	inc de                                            ; 053f: 13
 	inc de                                            ; 0540: 13
 	inc de                                            ; 0541: 13
@@ -761,18 +761,18 @@ Function0539:
 	inc de                                            ; 0544: 13
 	pop hl                                            ; 0545: e1
 	dec b                                             ; 0546: 05
-	jr nz, Function0539                               ; 0547: 20 f0
+	jr nz, .loop                                      ; 0547: 20 f0
 	ld de, $d842                                      ; 0549: 11 42 d8
-	ld c, $2                                          ; 054c: 0e 02
-	call Function020a                                 ; 054e: cd 0a 02
+	ld c, 2                                           ; 054c: 0e 02
+	call CopyBytes                                    ; 054e: cd 0a 02
 	ld de, $d84a                                      ; 0551: 11 4a d8
-	ld c, $2                                          ; 0554: 0e 02
-	call Function020a                                 ; 0556: cd 0a 02
+	ld c, 2                                           ; 0554: 0e 02
+	call CopyBytes                                    ; 0556: cd 0a 02
 	dec hl                                            ; 0559: 2b
 	dec hl                                            ; 055a: 2b
 	ld de, $d844                                      ; 055b: 11 44 d8
-	ld c, $2                                          ; 055e: 0e 02
-	call Function020a                                 ; 0560: cd 0a 02
+	ld c, 2                                           ; 055e: 0e 02
+	call CopyBytes                                    ; 0560: cd 0a 02
 	ret                                               ; 0563: c9
 
 Function0564:
@@ -785,8 +785,8 @@ Function0564:
 	ld b, $0                                          ; 056c: 06 00
 	ld c, a                                           ; 056e: 4f
 	add hl, bc                                        ; 056f: 09
-	ld c, $8                                          ; 0570: 0e 08
-	call Function020a                                 ; 0572: cd 0a 02
+	ld c, 8                                           ; 0570: 0e 08
+	call CopyBytes                                    ; 0572: cd 0a 02
 	pop bc                                            ; 0575: c1
 	pop hl                                            ; 0576: e1
 	dec c                                             ; 0577: 0d
@@ -812,14 +812,14 @@ Function0589:
 	jr z, .skip                                       ; 058f: 28 0f
 	ld hl, Unknown_08e4                               ; 0591: 21 e4 08
 	ld b, $0                                          ; 0594: 06 00
-.loop:
+.do_12:
 	ld a, [hli]                                       ; 0596: 2a
 	cp c                                              ; 0597: b9
 	jr z, .continue                                   ; 0598: 28 08
 	inc b                                             ; 059a: 04
 	ld a, b                                           ; 059b: 78
-	cp $c                                             ; 059c: fe 0c
-	jr nz, .loop                                      ; 059e: 20 f6
+	cp 12                                             ; 059c: fe 0c
+	jr nz, .do_12                                     ; 059e: 20 f6
 .skip:
 	jr .done                                          ; 05a0: 18 2d
 
@@ -877,13 +877,13 @@ Function05d0:
 	ld hl, Unknown_007a                               ; 05f5: 21 7a 00
 	ld a, [$d000]                                     ; 05f8: fa 00 d0
 	ld b, a                                           ; 05fb: 47
-	ld c, $2                                          ; 05fc: 0e 02
-.loop:
+	ld c, 2                                           ; 05fc: 0e 02
+.do_2:
 	ld a, [hli]                                       ; 05fe: 2a
 	cp b                                              ; 05ff: b8
 	call z, Function03da                              ; 0600: cc da 03
 	dec c                                             ; 0603: 0d
-	jr nz, .loop                                      ; 0604: 20 f8
+	jr nz, .do_2                                      ; 0604: 20 f8
 .done:
 	ret                                               ; 0606: c9
 
