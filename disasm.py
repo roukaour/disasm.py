@@ -323,7 +323,7 @@ opcode_table = [
 	(0, lambda pc: 'db $dd'),                            # dd
 	(1, lambda pc, a: 'sbc %s' % u8(a)),                 # de
 	(0, lambda pc: 'rst $18'),                           # df
-	(1, lambda pc, a: create_ldh(a, 'a')),               # e0
+	(1, lambda pc, a: create_ldh_to(a)),                 # e0
 	(0, lambda pc: 'pop hl'),                            # e1
 	(0, lambda pc: 'ld [$ff00+c], a'),                   # e2
 	(0, lambda pc: 'db $e3'),                            # e3
@@ -339,7 +339,7 @@ opcode_table = [
 	(0, lambda pc: 'db $ed'),                            # ed
 	(1, lambda pc, a: 'xor %s' % u8(a)),                 # ee
 	(0, lambda pc: 'rst $28'),                           # ef
-	(1, lambda pc, a: create_ldh('a', a)),               # f0
+	(1, lambda pc, a: create_ldh_from(a)),               # f0
 	(0, lambda pc: 'pop af'),                            # f1
 	(0, lambda pc: 'ld a, [$ff00+c]'),                   # f2
 	(0, lambda pc: 'di'),                                # f3
@@ -430,12 +430,11 @@ def disassemble_from(pc):
 		pc += 1 + width
 
 
-def create_ldh(dest, src):
-	if dest == 'a':
-		return 'ld a, [%s]' % gbhw_register_table.get(src, u16le(src, 0xff))
-	if src == 'a':
-		return 'ld [%s], a' % gbhw_register_table.get(dest, u16le(dest, 0xff))
-	raise ValueError('ldh %s, %s' % (dest, src))
+def create_ldh_to(a):
+	return 'ld a, [%s]' % gbhw_register_table.get(a, u16le(a, 0xff))
+
+def create_ldh_from(a):
+	return 'ld [%s], a' % gbhw_register_table.get(a, u16le(a, 0xff))
 
 gbhw_register_table = {
 	0x00: 'rJOYP',
