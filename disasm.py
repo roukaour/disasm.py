@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.5'
+__version__ = '1.6'
 
 import sys
 import os.path
@@ -435,6 +435,13 @@ def create_ldh_from(a):
 	return 'ld a, [%s]' % gbhw_register_table.get(a, '$ff00+' + u8(a))
 
 gbhw_register_table = {
+	0x00: 'rJOYP',     # Joypad (R/W)
+	0x01: 'rSB',       # Serial transfer data (R/W)
+	0x02: 'rSC',       # Serial Transfer Control (R/W)
+	0x04: 'rDIV',      # Divider Register (R/W)
+	0x05: 'rTIMA',     # Timer counter (R/W)
+	0x06: 'rTMA',      # Timer Modulo (R/W)
+	0x07: 'rTAC',      # Timer Control (R/W)
 	0x0f: 'rIF',       # Interrupt Flag (R/W)
 	0x10: 'rNR10',     # Channel 1 Sweep register (R/W)
 	0x11: 'rNR11',     # Channel 1 Sound length/Wave pattern duty (R/W)
