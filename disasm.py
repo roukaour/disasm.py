@@ -301,7 +301,7 @@ opcode_table = [
 	(2, lambda pc, a, b: create_jp(pc, a, b, 'z')),      # ca
 	(1, get_prefix_opcode),                              # cb
 	(2, lambda pc, a, b: create_call(pc, a, b, 'z')),    # cc
-	(2, lambda pc, a, b: create_call(pc, a, b)),         # cd
+	(2, create_call),                                    # cd
 	(1, lambda pc, a: 'adc %s' % u8(a)),                 # ce
 	(0, lambda pc: 'rst $8'),                            # cf
 	(0, lambda pc: 'ret nc'),                            # d0
