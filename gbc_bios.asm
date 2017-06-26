@@ -89,7 +89,7 @@ Function007c:
 	jr nz, .do_8                                      ; 00b7: 20 f9
 	call Function03f0                                 ; 00b9: cd f0 03
 
-	ld a, $01                                         ; 00bc: 3e 01
+	ld a, $1                                          ; 00bc: 3e 01
 	ld [rVBK], a                                      ; 00be: e0 4f
 	ld a, $91                                         ; 00c0: 3e 91
 	ld [rLCDC], a                                     ; 00c2: e0 40
@@ -175,7 +175,7 @@ Function0211:
 Function021d:
 	ld de, $ff00                                      ; 021d: 11 00 ff
 	ld hl, $d003                                      ; 0220: 21 03 d0
-	ld c, $0f                                         ; 0223: 0e 0f
+	ld c, $f                                          ; 0223: 0e 0f
 	ld a, $30                                         ; 0225: 3e 30
 	ld [de], a                                        ; 0227: 12
 	ld a, $20                                         ; 0228: 3e 20
@@ -238,7 +238,7 @@ Function0262:
 	push hl                                           ; 0264: e5
 
 	ld hl, $d800                                      ; 0265: 21 00 d8
-	ld b, $01                                         ; 0268: 06 01
+	ld b, $1                                          ; 0268: 06 01
 	ld d, $3f                                         ; 026a: 16 3f
 	ld e, $40                                         ; 026c: 1e 40
 	call Function024a                                 ; 026e: cd 4a 02
@@ -283,7 +283,7 @@ Function02a5:
 	inc a                                             ; 02a6: 3c
 	cp $3f                                            ; 02a7: fe 3f
 	jr nz, Function02a5                               ; 02a9: 20 fa
-	ld a, $01                                         ; 02ab: 3e 01
+	ld a, $1                                          ; 02ab: 3e 01
 	ld [rVBK], a                                      ; 02ad: e0 4f
 	pop hl                                            ; 02af: e1
 Function02b0:
@@ -299,17 +299,17 @@ Function02b0:
 	sub $30                                           ; 02c0: d6 30
 	jp nc, Function0306                               ; 02c2: d2 06 03
 	ld a, c                                           ; 02c5: 79
-	cp $01                                            ; 02c6: fe 01
+	cp $1                                             ; 02c6: fe 01
 	jp z, Function0306                                ; 02c8: ca 06 03
 	ld a, l                                           ; 02cb: 7d
 	cp $d1                                            ; 02cc: fe d1
 	jr z, Function02f1                                ; 02ce: 28 21
 	push bc                                           ; 02d0: c5
-	ld b, $03                                         ; 02d1: 06 03
+	ld b, $3                                          ; 02d1: 06 03
 Function02d3:
-	ld c, $01                                         ; 02d3: 0e 01
+	ld c, $1                                          ; 02d3: 0e 01
 Function02d5:
-	ld d, $03                                         ; 02d5: 16 03
+	ld d, $3                                          ; 02d5: 16 03
 Function02d7:
 	ld a, [hl]                                        ; 02d7: 7e
 	and $f8                                           ; 02d8: e6 f8
@@ -319,7 +319,7 @@ Function02d7:
 	jr nz, Function02d7                               ; 02dd: 20 f8
 	inc c                                             ; 02df: 0c
 	ld a, c                                           ; 02e0: 79
-	cp $06                                            ; 02e1: fe 06
+	cp $6                                             ; 02e1: fe 06
 	jr nz, Function02d5                               ; 02e3: 20 f0
 	ld de, $11                                        ; 02e5: 11 11 00
 	add hl, de                                        ; 02e8: 19
@@ -344,12 +344,12 @@ Function02ff:
 	ld [rNR14], a                                     ; 0304: e0 14
 Function0306:
 	ld a, [$d002]                                     ; 0306: fa 02 d0
-	cp $00                                            ; 0309: fe 00
+	cp $0                                             ; 0309: fe 00
 	jr z, Function0317                                ; 030b: 28 0a
 	dec a                                             ; 030d: 3d
 	ld [$d002], a                                     ; 030e: ea 02 d0
 	ld a, c                                           ; 0311: 79
-	cp $01                                            ; 0312: fe 01
+	cp $1                                             ; 0312: fe 01
 	jp z, Function0291                                ; 0314: ca 91 02
 Function0317:
 	dec c                                             ; 0317: 0d
@@ -365,7 +365,7 @@ Function031e:
 	dec c                                             ; 0327: 0d
 	jr nz, Function031e                               ; 0328: 20 f4
 	call Function0211                                 ; 032a: cd 11 02
-	ld a, $01                                         ; 032d: 3e 01
+	ld a, $1                                          ; 032d: 3e 01
 	ld [rVBK], a                                      ; 032f: e0 4f
 	call Function033e                                 ; 0331: cd 3e 03
 	call Function0341                                 ; 0334: cd 41 03
@@ -378,7 +378,7 @@ Function033e:
 	ld hl, Unknown_0008                               ; 033e: 21 08 00
 Function0341:
 	ld de, $ff51                                      ; 0341: 11 51 ff
-	ld c, $05                                         ; 0344: 0e 05
+	ld c, $5                                          ; 0344: 0e 05
 	call Function020a                                 ; 0346: cd 0a 02
 	ret                                               ; 0349: c9
 
@@ -400,7 +400,7 @@ Function035a:
 	rlc a                                             ; 035c: 07
 	rlc a                                             ; 035d: 07
 	rlc a                                             ; 035e: 07
-	and $07                                           ; 035f: e6 07
+	and $7                                            ; 035f: e6 07
 	ld b, a                                           ; 0361: 47
 	ld a, [hld]                                       ; 0362: 3a
 	rlc a                                             ; 0363: 07
@@ -420,7 +420,7 @@ Function036e:
 	or d                                              ; 0374: b2
 	ld [hli], a                                       ; 0375: 22
 	ld a, b                                           ; 0376: 78
-	and $03                                           ; 0377: e6 03
+	and $3                                            ; 0377: e6 03
 	ld e, a                                           ; 0379: 5f
 	ld a, [hl]                                        ; 037a: 7e
 	rrc a                                             ; 037b: 0f
@@ -442,7 +442,7 @@ Function0384:
 	ret                                               ; 038e: c9
 
 Function038f:
-	ld c, $00                                         ; 038f: 0e 00
+	ld c, $0                                          ; 038f: 0e 00
 .loop:
 	ld a, [de]                                        ; 0391: 1a
 	and $f0                                           ; 0392: e6 f0
@@ -456,7 +456,7 @@ Function038f:
 	or b                                              ; 039d: b0
 	ld [hli], a                                       ; 039e: 22
 	ld a, [de]                                        ; 039f: 1a
-	and $0f                                           ; 03a0: e6 0f
+	and $f                                            ; 03a0: e6 0f
 	bit 1, c                                          ; 03a2: cb 49
 	jr nz, .skip2                                     ; 03a4: 20 02
 	swap a                                            ; 03a6: cb 37
@@ -488,7 +488,7 @@ Function03c6:
 	ld b, a                                           ; 03c6: 47
 Function03c7:
 	push de                                           ; 03c7: d5
-	ld d, $04                                         ; 03c8: 16 04
+	ld d, $4                                          ; 03c8: 16 04
 .loop:
 	ld e, b                                           ; 03ca: 58
 	rl b                                              ; 03cb: cb 10
@@ -509,20 +509,20 @@ Function03da:
 	ld [$9910], a                                     ; 03dc: ea 10 99
 	ld hl, $992f                                      ; 03df: 21 2f 99
 Function03e2:
-	ld c, $0c                                         ; 03e2: 0e 0c
+	ld c, $c                                          ; 03e2: 0e 0c
 Function03e4:
 	dec a                                             ; 03e4: 3d
 	jr z, .done                                       ; 03e5: 28 08
 	ld [hld], a                                       ; 03e7: 32
 	dec c                                             ; 03e8: 0d
 	jr nz, Function03e4                               ; 03e9: 20 f9
-	ld l, $0f                                         ; 03eb: 2e 0f
+	ld l, $f                                          ; 03eb: 2e 0f
 	jr Function03e2                                   ; 03ed: 18 f3
 .done:
 	ret                                               ; 03ef: c9
 
 Function03f0:
-	ld a, $01                                         ; 03f0: 3e 01
+	ld a, $1                                          ; 03f0: 3e 01
 	ld [rVBK], a                                      ; 03f2: e0 4f
 	call Function0200                                 ; 03f4: cd 00 02
 	ld de, Unknown_0607                               ; 03f7: 11 07 06
@@ -544,8 +544,8 @@ Function03ff:
 	call Function038f                                 ; 0412: cd 8f 03
 	ld bc, $fff8                                      ; 0415: 01 f8 ff
 	add hl, bc                                        ; 0418: 09
-	ld de, $0072                                      ; 0419: 11 72 00
-	ld c, $08                                         ; 041c: 0e 08
+	ld de, Unknown_0072                               ; 0419: 11 72 00
+	ld c, $8                                          ; 041c: 0e 08
 Function041e:
 	inc hl                                            ; 041e: 23
 	ld a, [de]                                        ; 041f: 1a
@@ -554,22 +554,22 @@ Function041e:
 	dec c                                             ; 0422: 0d
 	jr nz, Function041e                               ; 0423: 20 f9
 	ld hl, $98c2                                      ; 0425: 21 c2 98
-	ld b, $08                                         ; 0428: 06 08
-	ld a, $08                                         ; 042a: 3e 08
+	ld b, $8                                          ; 0428: 06 08
+	ld a, $8                                          ; 042a: 3e 08
 Function042c:
 	ld c, $10                                         ; 042c: 0e 10
 Function042e:
 	ld [hli], a                                       ; 042e: 22
 	dec c                                             ; 042f: 0d
 	jr nz, Function042e                               ; 0430: 20 fc
-	ld de, $0010                                      ; 0432: 11 10 00
+	ld de, $10                                        ; 0432: 11 10 00
 	add hl, de                                        ; 0435: 19
 	dec b                                             ; 0436: 05
 	jr nz, Function042c                               ; 0437: 20 f3
 	xor a                                             ; 0439: af
 	ld [rVBK], a                                      ; 043a: e0 4f
 	ld hl, $98c2                                      ; 043c: 21 c2 98
-	ld a, $08                                         ; 043f: 3e 08
+	ld a, $8                                          ; 043f: 3e 08
 Function0441:
 	ld [hli], a                                       ; 0441: 22
 	inc a                                             ; 0442: 3c
@@ -585,16 +585,16 @@ Function0450:
 	jr nz, Function0441                               ; 0452: 20 ed
 	ld hl, $08d8                                      ; 0454: 21 d8 08
 	ld de, $d840                                      ; 0457: 11 40 d8
-	ld b, $08                                         ; 045a: 06 08
+	ld b, $8                                          ; 045a: 06 08
 Function045c:
 	ld a, $ff                                         ; 045c: 3e ff
 	ld [de], a                                        ; 045e: 12
 	inc de                                            ; 045f: 13
 	ld [de], a                                        ; 0460: 12
 	inc de                                            ; 0461: 13
-	ld c, $02                                         ; 0462: 0e 02
+	ld c, $2                                          ; 0462: 0e 02
 	call Function020a                                 ; 0464: cd 0a 02
-	ld a, $00                                         ; 0467: 3e 00
+	ld a, $0                                          ; 0467: 3e 00
 	ld [de], a                                        ; 0469: 12
 	inc de                                            ; 046a: 13
 	ld [de], a                                        ; 046b: 12
@@ -618,13 +618,13 @@ Function045c:
 
 Function0488:
 	ld l, $4b                                         ; 0488: 2e 4b
-	ld e, $01                                         ; 048a: 1e 01
+	ld e, $1                                          ; 048a: 1e 01
 Function048c:
 	ld a, [hli]                                       ; 048c: 2a
 	cp e                                              ; 048d: bb
 	jr nz, Function04ce                               ; 048e: 20 3e
 	ld l, $34                                         ; 0490: 2e 34
-	ld bc, $0010                                      ; 0492: 01 10 00
+	ld bc, $10                                        ; 0492: 01 10 00
 Function0495:
 	ld a, [hli]                                       ; 0495: 2a
 	add b                                             ; 0496: 80
@@ -633,7 +633,7 @@ Function0495:
 	jr nz, Function0495                               ; 0499: 20 fa
 	ld [$d000], a                                     ; 049b: ea 00 d0
 	ld hl, $06c7                                      ; 049e: 21 c7 06
-	ld c, $00                                         ; 04a1: 0e 00
+	ld c, $0                                          ; 04a1: 0e 00
 Function04a3:
 	ld a, [hli]                                       ; 04a3: 2a
 	cp b                                              ; 04a4: b8
@@ -649,7 +649,7 @@ Function04af:
 	sub $41                                           ; 04b0: d6 41
 	jr c, Function04d0                                ; 04b2: 38 1c
 	ld hl, $0716                                      ; 04b4: 21 16 07
-	ld d, $00                                         ; 04b7: 16 00
+	ld d, $0                                          ; 04b7: 16 00
 	ld e, a                                           ; 04b9: 5f
 	add hl, de                                        ; 04ba: 19
 Function04bb:
@@ -658,7 +658,7 @@ Function04bb:
 	ld a, [hl]                                        ; 04bf: 7e
 	cp d                                              ; 04c0: ba
 	jr z, Function04d0                                ; 04c1: 28 0d
-	ld de, $000e                                      ; 04c3: 11 0e 00
+	ld de, $e                                         ; 04c3: 11 0e 00
 	add hl, de                                        ; 04c6: 19
 	ld a, c                                           ; 04c7: 79
 	add e                                             ; 04c8: 83
@@ -666,10 +666,10 @@ Function04bb:
 	sub $5e                                           ; 04ca: d6 5e
 	jr c, Function04bb                                ; 04cc: 38 ed
 Function04ce:
-	ld c, $00                                         ; 04ce: 0e 00
+	ld c, $0                                          ; 04ce: 0e 00
 Function04d0:
 	ld hl, $0733                                      ; 04d0: 21 33 07
-	ld b, $00                                         ; 04d3: 06 00
+	ld b, $0                                          ; 04d3: 06 00
 	add hl, bc                                        ; 04d5: 09
 	ld a, [hl]                                        ; 04d6: 7e
 	and $1f                                           ; 04d7: e6 1f
@@ -737,14 +737,14 @@ Function0528:
 	ld a, [$d005]                                     ; 052b: fa 05 d0
 	rlc a                                             ; 052e: 07
 	rlc a                                             ; 052f: 07
-	ld b, $00                                         ; 0530: 06 00
+	ld b, $0                                          ; 0530: 06 00
 	ld c, a                                           ; 0532: 4f
 	add hl, bc                                        ; 0533: 09
 	ld de, $d840                                      ; 0534: 11 40 d8
-	ld b, $08                                         ; 0537: 06 08
+	ld b, $8                                          ; 0537: 06 08
 Function0539:
 	push hl                                           ; 0539: e5
-	ld c, $02                                         ; 053a: 0e 02
+	ld c, $2                                          ; 053a: 0e 02
 	call Function020a                                 ; 053c: cd 0a 02
 	inc de                                            ; 053f: 13
 	inc de                                            ; 0540: 13
@@ -756,15 +756,15 @@ Function0539:
 	dec b                                             ; 0546: 05
 	jr nz, Function0539                               ; 0547: 20 f0
 	ld de, $d842                                      ; 0549: 11 42 d8
-	ld c, $02                                         ; 054c: 0e 02
+	ld c, $2                                          ; 054c: 0e 02
 	call Function020a                                 ; 054e: cd 0a 02
 	ld de, $d84a                                      ; 0551: 11 4a d8
-	ld c, $02                                         ; 0554: 0e 02
+	ld c, $2                                          ; 0554: 0e 02
 	call Function020a                                 ; 0556: cd 0a 02
 	dec hl                                            ; 0559: 2b
 	dec hl                                            ; 055a: 2b
 	ld de, $d844                                      ; 055b: 11 44 d8
-	ld c, $02                                         ; 055e: 0e 02
+	ld c, $2                                          ; 055e: 0e 02
 	call Function020a                                 ; 0560: cd 0a 02
 	ret                                               ; 0563: c9
 
@@ -775,10 +775,10 @@ Function0564:
 	push hl                                           ; 0567: e5
 	push bc                                           ; 0568: c5
 	ld hl, $07e8                                      ; 0569: 21 e8 07
-	ld b, $00                                         ; 056c: 06 00
+	ld b, $0                                          ; 056c: 06 00
 	ld c, a                                           ; 056e: 4f
 	add hl, bc                                        ; 056f: 09
-	ld c, $08                                         ; 0570: 0e 08
+	ld c, $8                                          ; 0570: 0e 08
 	call Function020a                                 ; 0572: cd 0a 02
 	pop bc                                            ; 0575: c1
 	pop hl                                            ; 0576: e1
@@ -804,14 +804,14 @@ Function0589:
 	and $ff                                           ; 058d: e6 ff
 	jr z, .skip                                       ; 058f: 28 0f
 	ld hl, $08e4                                      ; 0591: 21 e4 08
-	ld b, $00                                         ; 0594: 06 00
+	ld b, $0                                          ; 0594: 06 00
 .loop:
 	ld a, [hli]                                       ; 0596: 2a
 	cp c                                              ; 0597: b9
 	jr z, .continue                                   ; 0598: 28 08
 	inc b                                             ; 059a: 04
 	ld a, b                                           ; 059b: 78
-	cp $0c                                            ; 059c: fe 0c
+	cp $c                                             ; 059c: fe 0c
 	jr nz, .loop                                      ; 059e: 20 f6
 .skip:
 	jr .done                                          ; 05a0: 18 2d
@@ -821,7 +821,7 @@ Function0589:
 	ld [$d005], a                                     ; 05a3: ea 05 d0
 	ld a, $1e                                         ; 05a6: 3e 1e
 	ld [$d002], a                                     ; 05a8: ea 02 d0
-	ld de, $000b                                      ; 05ab: 11 0b 00
+	ld de, $b                                         ; 05ab: 11 0b 00
 	add hl, de                                        ; 05ae: 19
 	ld d, [hl]                                        ; 05af: 56
 	ld a, d                                           ; 05b0: 7a
@@ -856,20 +856,20 @@ Function05d0:
 	ld [rLCDMODE], a                                  ; 05da: e0 4c
 	jr .done                                          ; 05dc: 18 28
 .ok:
-	ld a, $04                                         ; 05de: 3e 04
+	ld a, $4                                          ; 05de: 3e 04
 	ld [rLCDMODE], a                                  ; 05e0: e0 4c
-	ld a, $01                                         ; 05e2: 3e 01
+	ld a, $1                                          ; 05e2: 3e 01
 	ld [rUNKNOWN1], a                                 ; 05e4: e0 6c
 	ld hl, $da00                                      ; 05e6: 21 00 da
 	call Function057b                                 ; 05e9: cd 7b 05
 	ld b, $10                                         ; 05ec: 06 10
-	ld d, $00                                         ; 05ee: 16 00
-	ld e, $08                                         ; 05f0: 1e 08
+	ld d, $0                                          ; 05ee: 16 00
+	ld e, $8                                          ; 05f0: 1e 08
 	call Function024a                                 ; 05f2: cd 4a 02
 	ld hl, $007a                                      ; 05f5: 21 7a 00
 	ld a, [$d000]                                     ; 05f8: fa 00 d0
 	ld b, a                                           ; 05fb: 47
-	ld c, $02                                         ; 05fc: 0e 02
+	ld c, $2                                          ; 05fc: 0e 02
 .loop:
 	ld a, [hli]                                       ; 05fe: 2a
 	cp b                                              ; 05ff: b8
