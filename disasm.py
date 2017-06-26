@@ -4,8 +4,8 @@
 Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
-__author__  = "Rangi"
-__version__ = "1.2"
+__author__  = 'Rangi'
+__version__ = '1.3'
 
 import sys
 import os.path
@@ -432,269 +432,95 @@ def disassemble_from(pc):
 
 def create_ldh(dest, src):
 	if dest == 'a':
-		return 'ld a, [%s]' % gbhw_register_table[src]
+		return 'ld a, [%s]' % gbhw_register_table.get(src, u16le(src, 0xff))
 	if src == 'a':
-		return 'ld [%s], a' % gbhw_register_table[dest]
+		return 'ld [%s], a' % gbhw_register_table.get(dest, u16le(dest, 0xff))
 	raise ValueError('ldh %s, %s' % (dest, src))
 
-gbhw_register_table = [
-	'rJOYP',     # 00
-	'rSB',       # 01
-	'rSC',       # 02
-	'$ff03',     # 03
-	'rDIV',      # 04
-	'rTIMA',     # 05
-	'rTMA',      # 06
-	'rTAC',      # 07
-	'$ff08',     # 08
-	'$ff09',     # 09
-	'$ff0a',     # 0a
-	'$ff0b',     # 0b
-	'$ff0c',     # 0c
-	'$ff0d',     # 0d
-	'$ff0e',     # 0e
-	'rIF',       # 0f
-	'rNR10',     # 10
-	'rNR11',     # 11
-	'rNR12',     # 12
-	'rNR13',     # 13
-	'rNR14',     # 14
-	'rNR20',     # 15
-	'rNR21',     # 16
-	'rNR22',     # 17
-	'rNR23',     # 18
-	'rNR24',     # 19
-	'rNR30',     # 1a
-	'rNR31',     # 1b
-	'rNR32',     # 1c
-	'rNR33',     # 1d
-	'rNR34',     # 1e
-	'rNR40',     # 1f
-	'rNR41',     # 20
-	'rNR42',     # 21
-	'rNR43',     # 22
-	'rNR44',     # 23
-	'rNR50',     # 24
-	'rNR51',     # 25
-	'rNR52',     # 26
-	'$ff27',     # 27
-	'$ff28',     # 28
-	'$ff29',     # 29
-	'$ff2a',     # 2a
-	'$ff2b',     # 2b
-	'$ff2c',     # 2c
-	'$ff2d',     # 2d
-	'$ff2e',     # 2e
-	'$ff2f',     # 2f
-	'rWave_0',   # 30
-	'rWave_1',   # 31
-	'rWave_2',   # 32
-	'rWave_3',   # 33
-	'rWave_4',   # 34
-	'rWave_5',   # 35
-	'rWave_6',   # 36
-	'rWave_7',   # 37
-	'rWave_8',   # 38
-	'rWave_9',   # 39
-	'rWave_a',   # 3a
-	'rWave_b',   # 3b
-	'rWave_c',   # 3c
-	'rWave_d',   # 3d
-	'rWave_e',   # 3e
-	'rWave_f',   # 3f
-	'rLCDC',     # 40
-	'rSTAT',     # 41
-	'rSCY',      # 42
-	'rSCX',      # 43
-	'rLY',       # 44
-	'rLYC',      # 45
-	'rDMA',      # 46
-	'rBGP',      # 47
-	'rOBP0',     # 48
-	'rOBP1',     # 49
-	'rWY',       # 4a
-	'rWX',       # 4b
-	'rLCDMODE',  # 4c
-	'rKEY1',     # 4d
-	'$ff4e',     # 4e
-	'rVBK',      # 4f
-	'rBLCK',     # 50
-	'rHDMA1',    # 51
-	'rHDMA2',    # 52
-	'rHDMA3',    # 53
-	'rHDMA4',    # 54
-	'rHDMA5',    # 55
-	'rRP',       # 56
-	'$ff57',     # 57
-	'$ff58',     # 58
-	'$ff59',     # 59
-	'$ff5a',     # 5a
-	'$ff5b',     # 5b
-	'$ff5c',     # 5c
-	'$ff5d',     # 5d
-	'$ff5e',     # 5e
-	'$ff5f',     # 5f
-	'$ff60',     # 60
-	'$ff61',     # 61
-	'$ff62',     # 62
-	'$ff63',     # 63
-	'$ff64',     # 64
-	'$ff65',     # 65
-	'$ff66',     # 66
-	'$ff67',     # 67
-	'rBGPI',     # 68
-	'rBGPD',     # 69
-	'rOBPI',     # 6a
-	'rOBPD',     # 6b
-	'rUNKNOWN1', # 6c
-	'$ff6d',     # 6d
-	'$ff6e',     # 6e
-	'$ff6f',     # 6f
-	'rSVBK',     # 70
-	'$ff71',     # 71
-	'rUNKNOWN2', # 72
-	'rUNKNOWN3', # 73
-	'rUNKNOWN4', # 74
-	'rUNKNOWN5', # 75
-	'rUNKNOWN6', # 76
-	'rUNKNOWN7', # 77
-	'$ff78',     # 78
-	'$ff79',     # 79
-	'$ff7a',     # 7a
-	'$ff7b',     # 7b
-	'$ff7c',     # 7c
-	'$ff7d',     # 7d
-	'$ff7e',     # 7e
-	'$ff7f',     # 7f
-	'$ff80',     # 80
-	'$ff81',     # 81
-	'$ff82',     # 82
-	'$ff83',     # 83
-	'$ff84',     # 84
-	'$ff85',     # 85
-	'$ff86',     # 86
-	'$ff87',     # 87
-	'$ff88',     # 88
-	'$ff89',     # 89
-	'$ff8a',     # 8a
-	'$ff8b',     # 8b
-	'$ff8c',     # 8c
-	'$ff8d',     # 8d
-	'$ff8e',     # 8e
-	'$ff8f',     # 8f
-	'$ff90',     # 90
-	'$ff91',     # 91
-	'$ff92',     # 92
-	'$ff93',     # 93
-	'$ff94',     # 94
-	'$ff95',     # 95
-	'$ff96',     # 96
-	'$ff97',     # 97
-	'$ff98',     # 98
-	'$ff99',     # 99
-	'$ff9a',     # 9a
-	'$ff9b',     # 9b
-	'$ff9c',     # 9c
-	'$ff9d',     # 9d
-	'$ff9e',     # 9e
-	'$ff9f',     # 9f
-	'$ffa0',     # a0
-	'$ffa1',     # a1
-	'$ffa2',     # a2
-	'$ffa3',     # a3
-	'$ffa4',     # a4
-	'$ffa5',     # a5
-	'$ffa6',     # a6
-	'$ffa7',     # a7
-	'$ffa8',     # a8
-	'$ffa9',     # a9
-	'$ffaa',     # aa
-	'$ffab',     # ab
-	'$ffac',     # ac
-	'$ffad',     # ad
-	'$ffae',     # ae
-	'$ffaf',     # af
-	'$ffb0',     # b0
-	'$ffb1',     # b1
-	'$ffb2',     # b2
-	'$ffb3',     # b3
-	'$ffb4',     # b4
-	'$ffb5',     # b5
-	'$ffb6',     # b6
-	'$ffb7',     # b7
-	'$ffb8',     # b8
-	'$ffb9',     # b9
-	'$ffba',     # ba
-	'$ffbb',     # bb
-	'$ffbc',     # bc
-	'$ffbd',     # bd
-	'$ffbe',     # be
-	'$ffbf',     # bf
-	'$ffc0',     # c0
-	'$ffc1',     # c1
-	'$ffc2',     # c2
-	'$ffc3',     # c3
-	'$ffc4',     # c4
-	'$ffc5',     # c5
-	'$ffc6',     # c6
-	'$ffc7',     # c7
-	'$ffc8',     # c8
-	'$ffc9',     # c9
-	'$ffca',     # ca
-	'$ffcb',     # cb
-	'$ffcc',     # cc
-	'$ffcd',     # cd
-	'$ffce',     # ce
-	'$ffcf',     # cf
-	'$ffd0',     # d0
-	'$ffd1',     # d1
-	'$ffd2',     # d2
-	'$ffd3',     # d3
-	'$ffd4',     # d4
-	'$ffd5',     # d5
-	'$ffd6',     # d6
-	'$ffd7',     # d7
-	'$ffd8',     # d8
-	'$ffd9',     # d9
-	'$ffda',     # da
-	'$ffdb',     # db
-	'$ffdc',     # dc
-	'$ffdd',     # dd
-	'$ffde',     # de
-	'$ffdf',     # df
-	'$ffe0',     # e0
-	'$ffe1',     # e1
-	'$ffe2',     # e2
-	'$ffe3',     # e3
-	'$ffe4',     # e4
-	'$ffe5',     # e5
-	'$ffe6',     # e6
-	'$ffe7',     # e7
-	'$ffe8',     # e8
-	'$ffe9',     # e9
-	'$ffea',     # ea
-	'$ffeb',     # eb
-	'$ffec',     # ec
-	'$ffed',     # ed
-	'$ffee',     # ee
-	'$ffef',     # ef
-	'$fff0',     # f0
-	'$fff1',     # f1
-	'$fff2',     # f2
-	'$fff3',     # f3
-	'$fff4',     # f4
-	'$fff5',     # f5
-	'$fff6',     # f6
-	'$fff7',     # f7
-	'$fff8',     # f8
-	'$fff9',     # f9
-	'$fffa',     # fa
-	'$fffb',     # fb
-	'$fffc',     # fc
-	'$fffd',     # fd
-	'$fffe',     # fe
-	'rIE',       # ff
-]
+gbhw_register_table = {
+	0x00: 'rJOYP',
+	0x01: 'rSB',
+	0x02: 'rSC',
+	0x04: 'rDIV',
+	0x05: 'rTIMA',
+	0x06: 'rTMA',
+	0x07: 'rTAC',
+	0x0f: 'rIF',
+	0x10: 'rNR10',
+	0x11: 'rNR11',
+	0x12: 'rNR12',
+	0x13: 'rNR13',
+	0x14: 'rNR14',
+	0x15: 'rNR20',
+	0x16: 'rNR21',
+	0x17: 'rNR22',
+	0x18: 'rNR23',
+	0x19: 'rNR24',
+	0x1a: 'rNR30',
+	0x1b: 'rNR31',
+	0x1c: 'rNR32',
+	0x1d: 'rNR33',
+	0x1e: 'rNR34',
+	0x1f: 'rNR40',
+	0x20: 'rNR41',
+	0x21: 'rNR42',
+	0x22: 'rNR43',
+	0x23: 'rNR44',
+	0x24: 'rNR50',
+	0x25: 'rNR51',
+	0x26: 'rNR52',
+	0x30: 'rWave_0',
+	0x31: 'rWave_1',
+	0x32: 'rWave_2',
+	0x33: 'rWave_3',
+	0x34: 'rWave_4',
+	0x35: 'rWave_5',
+	0x36: 'rWave_6',
+	0x37: 'rWave_7',
+	0x38: 'rWave_8',
+	0x39: 'rWave_9',
+	0x3a: 'rWave_a',
+	0x3b: 'rWave_b',
+	0x3c: 'rWave_c',
+	0x3d: 'rWave_d',
+	0x3e: 'rWave_e',
+	0x3f: 'rWave_f',
+	0x40: 'rLCDC',
+	0x41: 'rSTAT',
+	0x42: 'rSCY',
+	0x43: 'rSCX',
+	0x44: 'rLY',
+	0x45: 'rLYC',
+	0x46: 'rDMA',
+	0x47: 'rBGP',
+	0x48: 'rOBP0',
+	0x49: 'rOBP1',
+	0x4a: 'rWY',
+	0x4b: 'rWX',
+	0x4c: 'rLCDMODE',
+	0x4d: 'rKEY1',
+	0x4f: 'rVBK',
+	0x50: 'rBLCK',
+	0x51: 'rHDMA1',
+	0x52: 'rHDMA2',
+	0x53: 'rHDMA3',
+	0x54: 'rHDMA4',
+	0x55: 'rHDMA5',
+	0x56: 'rRP',
+	0x68: 'rBGPI',
+	0x69: 'rBGPD',
+	0x6a: 'rOBPI',
+	0x6b: 'rOBPD',
+	0x6c: 'rUNKNOWN1',
+	0x70: 'rSVBK',
+	0x72: 'rUNKNOWN2',
+	0x73: 'rUNKNOWN3',
+	0x74: 'rUNKNOWN4',
+	0x75: 'rUNKNOWN5',
+	0x76: 'rUNKNOWN6',
+	0x77: 'rUNKNOWN7',
+	0xff: 'rIE',
+}
 
 
 def main():
