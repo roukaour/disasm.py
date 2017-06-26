@@ -87,12 +87,9 @@ def create_branch(op, target, condition=None):
 
 
 def get_prefix_opcode(pc, b):
-	ops = [
-		'rlc', 'rrc', 'rl', 'rr', 'sla', 'sra', 'swap', 'srl',
-		'bit 0,', 'bit 1,', 'bit 2,', 'bit 3,', 'bit 4,', 'bit 5,', 'bit 6,', 'bit 7,',
-		'res 0,', 'res 1,', 'res 2,', 'res 3,', 'res 4,', 'res 5,', 'res 6,', 'res 7,',
-		'set 0,', 'set 1,', 'set 2,', 'set 3,', 'set 4,', 'set 5,', 'set 6,', 'set 7,',
-	]
+	ops = (['rlc', 'rrc', 'rl', 'rr', 'sla', 'sra', 'swap', 'srl'] +
+		['bit %d,' % i for i in range(8)] + ['res %d,' % i for i in range(8)] +
+		['set %d,' % i for i in range(8)])
 	args = ['b', 'c', 'd', 'e', 'h', 'l', '[hl]', 'a']
 	op, arg = divmod(b, 8)
 	return '%s %s' % (ops[op], args[arg])
