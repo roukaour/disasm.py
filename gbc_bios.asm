@@ -45,11 +45,11 @@ Unknown_007a:
 	db $58, $43                                       ; 007a-007b
 
 Function007c:
-	ld a, [rSVBK]                                     ; 007c: e0 70
+	ld [rSVBK], a                                     ; 007c: e0 70
 ; a = the color number's mappings
 	ld a, $fc                                         ; 007e: 3e fc
 ; initialize the palette
-	ld a, [rBGP]                                      ; 0080: e0 47
+	ld [rBGP], a                                      ; 0080: e0 47
 	call Function0275                                 ; 0082: cd 75 02
 	call Function0200                                 ; 0085: cd 00 02
 	ld h, $d0                                         ; 0088: 26 d0
@@ -95,15 +95,15 @@ Function007c:
 	call Function03f0                                 ; 00b9: cd f0 03
 
 	ld a, $1                                          ; 00bc: 3e 01
-	ld a, [rVBK]                                      ; 00be: e0 4f
+	ld [rVBK], a                                      ; 00be: e0 4f
 	ld a, $91                                         ; 00c0: 3e 91
-	ld a, [rLCDC]                                     ; 00c2: e0 40
+	ld [rLCDC], a                                     ; 00c2: e0 40
 	ld hl, $98b2                                      ; 00c4: 21 b2 98
 	ld b, $4e                                         ; 00c7: 06 4e
 	ld c, $44                                         ; 00c9: 0e 44
 	call Function0291                                 ; 00cb: cd 91 02
 	xor a                                             ; 00ce: af
-	ld a, [rVBK]                                      ; 00cf: e0 4f
+	ld [rVBK], a                                      ; 00cf: e0 4f
 
 	ld c, $80                                         ; 00d1: 0e 80
 	ld hl, NintendoLogo                               ; 00d3: 21 42 00
@@ -138,9 +138,9 @@ Function007c:
 	call Function05d0                                 ; 00f6: cd d0 05
 
 	xor a                                             ; 00f9: af
-	ld a, [rSVBK]                                     ; 00fa: e0 70
+	ld [rSVBK], a                                     ; 00fa: e0 70
 	ld a, $11                                         ; 00fc: 3e 11
-	ld a, [rBLCK]                                     ; 00fe: e0 50
+	ld [rBLCK], a                                     ; 00fe: e0 50
 
 ; The cartridge header is copied here, and begins with a boot procedure that
 ; will terminate this function, usually by jumping to the actual game code.
@@ -215,8 +215,8 @@ Function021d:
 
 Function024a:
 	ld a, $80                                         ; 024a: 3e 80
-	ld a, [rBGPI]                                     ; 024c: e0 68
-	ld a, [rOBPI]                                     ; 024e: e0 6a
+	ld [rBGPI], a                                     ; 024c: e0 68
+	ld [rOBPI], a                                     ; 024e: e0 6a
 
 	ld c, $6b                                         ; 0250: 0e 6b
 .loop1:
@@ -255,13 +255,13 @@ Function0262:
 
 Function0275:
 	ld a, $80                                         ; 0275: 3e 80
-	ld a, [rNR52]                                     ; 0277: e0 26
-	ld a, [rNR11]                                     ; 0279: e0 11
+	ld [rNR52], a                                     ; 0277: e0 26
+	ld [rNR11], a                                     ; 0279: e0 11
 	ld a, $f3                                         ; 027b: 3e f3
-	ld a, [rNR12]                                     ; 027d: e0 12
-	ld a, [rNR51]                                     ; 027f: e0 25
+	ld [rNR12], a                                     ; 027d: e0 12
+	ld [rNR51], a                                     ; 027f: e0 25
 	ld a, $77                                         ; 0281: 3e 77
-	ld a, [rNR50]                                     ; 0283: e0 24
+	ld [rNR50], a                                     ; 0283: e0 24
 	ld hl, rWave_0                                    ; 0285: 21 30 ff
 	xor a                                             ; 0288: af
 	ld c, 16                                          ; 0289: 0e 10
@@ -280,7 +280,7 @@ Function0291:
 	jr nz, .skip1                                     ; 029a: 20 14
 	push hl                                           ; 029c: e5
 	xor a                                             ; 029d: af
-	ld a, [rVBK]                                      ; 029e: e0 4f
+	ld [rVBK], a                                      ; 029e: e0 4f
 	ld hl, $99a7                                      ; 02a0: 21 a7 99
 	ld a, $38                                         ; 02a3: 3e 38
 .loop1:
@@ -289,7 +289,7 @@ Function0291:
 	cp $3f                                            ; 02a7: fe 3f
 	jr nz, .loop1                                     ; 02a9: 20 fa
 	ld a, $1                                          ; 02ab: 3e 01
-	ld a, [rVBK]                                      ; 02ad: e0 4f
+	ld [rVBK], a                                      ; 02ad: e0 4f
 	pop hl                                            ; 02af: e1
 .skip1:
 	push bc                                           ; 02b0: c5
@@ -345,9 +345,9 @@ Function0291:
 	jr nz, .skip3                                     ; 02fd: 20 07
 .ok:
 	ld a, e                                           ; 02ff: 7b
-	ld a, [rNR13]                                     ; 0300: e0 13
+	ld [rNR13], a                                     ; 0300: e0 13
 	ld a, $87                                         ; 0302: 3e 87
-	ld a, [rNR14]                                     ; 0304: e0 14
+	ld [rNR14], a                                     ; 0304: e0 14
 .skip3:
 	ld a, [$d002]                                     ; 0306: fa 02 d0
 	cp $0                                             ; 0309: fe 00
@@ -372,11 +372,11 @@ Function031c:
 	jr nz, .do_38                                     ; 0328: 20 f4
 	call Function0211                                 ; 032a: cd 11 02
 	ld a, $1                                          ; 032d: 3e 01
-	ld a, [rVBK]                                      ; 032f: e0 4f
+	ld [rVBK], a                                      ; 032f: e0 4f
 	call Function033e                                 ; 0331: cd 3e 03
 	call Function0341                                 ; 0334: cd 41 03
 	xor a                                             ; 0337: af
-	ld a, [rVBK]                                      ; 0338: e0 4f
+	ld [rVBK], a                                      ; 0338: e0 4f
 	call Function033e                                 ; 033a: cd 3e 03
 	ret                                               ; 033d: c9
 
@@ -529,7 +529,7 @@ Function03da:
 
 Function03f0:
 	ld a, $1                                          ; 03f0: 3e 01
-	ld a, [rVBK]                                      ; 03f2: e0 4f
+	ld [rVBK], a                                      ; 03f2: e0 4f
 	call Function0200                                 ; 03f4: cd 00 02
 	ld de, Unknown_0607                               ; 03f7: 11 07 06
 	ld hl, $8080                                      ; 03fa: 21 80 80
@@ -574,7 +574,7 @@ Function03f0:
 	dec b                                             ; 0436: 05
 	jr nz, .do_8                                      ; 0437: 20 f3
 	xor a                                             ; 0439: af
-	ld a, [rVBK]                                      ; 043a: e0 4f
+	ld [rVBK], a                                      ; 043a: e0 4f
 	ld hl, $98c2                                      ; 043c: 21 c2 98
 	ld a, $8                                          ; 043f: 3e 08
 .loop:
@@ -861,13 +861,13 @@ Function05d0:
 	ld a, [$0143]                                     ; 05d3: fa 43 01
 	bit 7, a                                          ; 05d6: cb 7f
 	jr z, .ok                                         ; 05d8: 28 04
-	ld a, [rLCDMODE]                                  ; 05da: e0 4c
+	ld [rLCDMODE], a                                  ; 05da: e0 4c
 	jr .done                                          ; 05dc: 18 28
 .ok:
 	ld a, $4                                          ; 05de: 3e 04
-	ld a, [rLCDMODE]                                  ; 05e0: e0 4c
+	ld [rLCDMODE], a                                  ; 05e0: e0 4c
 	ld a, $1                                          ; 05e2: 3e 01
-	ld a, [rUNKNOWN1]                                 ; 05e4: e0 6c
+	ld [rUNKNOWN1], a                                 ; 05e4: e0 6c
 	ld hl, $da00                                      ; 05e6: 21 00 da
 	call Function057b                                 ; 05e9: cd 7b 05
 	ld b, $10                                         ; 05ec: 06 10
