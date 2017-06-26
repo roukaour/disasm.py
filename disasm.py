@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.4'
+__version__ = '1.5'
 
 import sys
 import os.path
@@ -429,10 +429,10 @@ def disassemble_from(pc):
 
 
 def create_ldh_to(a):
-	return 'ld a, [%s]' % gbhw_register_table.get(a, '$ff00+' + u8(a))
+	return 'ld [%s], a' % gbhw_register_table.get(a, '$ff00+' + u8(a))
 
 def create_ldh_from(a):
-	return 'ld [%s], a' % gbhw_register_table.get(a, '$ff00+' + u8(a))
+	return 'ld a, [%s]' % gbhw_register_table.get(a, '$ff00+' + u8(a))
 
 gbhw_register_table = {
 	0x0f: 'rIF',       # Interrupt Flag (R/W)
