@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.3'
+__version__ = '1.4'
 
 import sys
 import os.path
@@ -103,7 +103,7 @@ opcode_table = [
 	(0, lambda pc: 'inc b'),                             # 04 - inc b
 	(0, lambda pc: 'dec b'),                             # 05 - dec b
 	(1, lambda pc, a: 'ld b, %s' % u8(a)),               # 06 - ld b, d8
-	(0, lambda pc: 'rlc a'),                             # 07 - rlc a
+	(0, lambda pc: 'rlca'),                              # 07 - rlca
 	(2, lambda pc, a, b: 'ld [%s], sp' % u16le(a, b)),   # 08 - ld [d16], sp
 	(0, lambda pc: 'add hl, bc'),                        # 09 - add hl, bc
 	(0, lambda pc: 'ld a, [bc]'),                        # 0a - ld a, [bc]
@@ -111,7 +111,7 @@ opcode_table = [
 	(0, lambda pc: 'inc c'),                             # 0c - inc c
 	(0, lambda pc: 'dec c'),                             # 0d - dec c
 	(1, lambda pc, a: 'ld c, %s' % u8(a)),               # 0e - ld c, d8
-	(0, lambda pc: 'rrc a'),                             # 0f - rrc a
+	(0, lambda pc: 'rrca'),                              # 0f - rrca
 	(0, lambda pc: 'stop'),                              # 10 - stop
 	(2, lambda pc, a, b: 'ld de, %s' % u16le(a, b)),     # 11 - ld de, d16
 	(0, lambda pc: 'ld [de], a'),                        # 12 - ld [de], a
@@ -429,10 +429,10 @@ def disassemble_from(pc):
 
 
 def create_ldh_to(a):
-	return 'ld a, [%s]' % gbhw_register_table.get(a, u16le(a, 0xff))
+	return 'ld a, [%s]' % gbhw_register_table.get(a, '$ff00+' + u8(a))
 
 def create_ldh_from(a):
-	return 'ld [%s], a' % gbhw_register_table.get(a, u16le(a, 0xff))
+	return 'ld [%s], a' % gbhw_register_table.get(a, '$ff00+' + u8(a))
 
 gbhw_register_table = {
 	0x0f: 'rIF',       # Interrupt Flag (R/W)
