@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.6'
+__version__ = '1.7'
 
 import sys
 import os.path
@@ -15,6 +15,7 @@ from collections import defaultdict
 starting_points = set()
 labels = defaultdict(lambda: set())
 raw_data = {}
+left_data = {}
 data_size = 0
 operations = {}
 terminate = False
@@ -356,17 +357,18 @@ opcode_table = [
 
 
 def disassemble(filename, entry_point=0x000000):
-	global raw_data, data_size, starting_points, operations
+	global raw_data, left_data, data_size, starting_points, operations
 
 	with open(filename, 'rb') as f:
 		raw_data = dict(enumerate(f.read()))
 		data_size = len(raw_data)
+		left_data = raw_data.copy()
 
 	starting_points.add(entry_point)
 
 	while starting_points:
 		pc = starting_points.pop()
-		if pc in raw_data:
+		if pc in left_data:
 			disassemble_from(pc)
 
 	pc = 0
@@ -382,12 +384,12 @@ def disassemble(filename, entry_point=0x000000):
 			print('\t%s; %s: %s' % (line, format_address(pc), format_bytes(bytes)))
 			pc += 1
 
-		elif pc in raw_data:
+		elif pc in left_data:
 			chunk_pc = pc
 			CHUNK_SIZE = 8
 			data = []
-			while pc in raw_data:
-				data.append(raw_data[pc])
+			while pc in left_data:
+				data.append(left_data[pc])
 				pc += 1
 			while data:
 				chunk, data = data[:CHUNK_SIZE], data[CHUNK_SIZE:]
@@ -402,14 +404,14 @@ def disassemble(filename, entry_point=0x000000):
 
 
 def disassemble_from(pc):
-	global raw_data, operations, terminate
+	global raw_data, left_data, operations, terminate
 
 	terminate = False
 
 	while pc < data_size:
-		if pc not in raw_data:
+		if pc not in left_data:
 			return
-		opcode = raw_data[pc]
+		opcode = left_data[pc]
 		width, get_operation = opcode_table[opcode]
 
 		if pc + width < data_size:
@@ -420,7 +422,8 @@ def disassemble_from(pc):
 			operations[pc] = (create_db(pc, *bytes), bytes)
 
 		for i in range(pc, min(pc + 1 + width, data_size)):
-			del raw_data[i]
+			if i in left_data:
+				del left_data[i]
 
 		if terminate:
 			return
