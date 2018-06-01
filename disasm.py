@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.8'
+__version__ = '1.8.1'
 
 import sys
 import os.path
@@ -575,6 +575,7 @@ def main():
 	if sym_filename:
 		sym_labels = parse_symfile(sym_filename)
 		labels.update(sym_labels)
+		starting_points.update(sym_labels.keys())
 
 	labels[entry_point].add('ENTRY_POINT')
 
