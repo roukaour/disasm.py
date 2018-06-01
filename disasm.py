@@ -5,7 +5,7 @@ Disassemble a GameBoy ROM into Z80 assembly code in rgbds syntax.
 """
 
 __author__  = 'Rangi'
-__version__ = '1.7'
+__version__ = '1.8'
 
 import sys
 import os.path
@@ -48,6 +48,28 @@ def format_address(address):
 def format_bytes(bytes):
 	return ' '.join('%02x' % b for b in bytes)
 
+def bank_offset_to_address(bank_offset):
+	bank, offset = bank_offset.split(':')
+	bank = int(bank, 16)
+	offset = int(offset, 16)
+	if bank > 0x00:
+		bank -= 1
+	return bank * 0x4000 + offset
+
+
+def parse_symfile(filename):
+	with open(filename, 'r') as f:
+		lines = f.readlines()
+	labels = defaultdict(lambda: set())
+	for line in lines:
+		line = line.split(';')[0].strip()
+		if not line:
+			continue
+		bank_offset, label = line.split()
+		address = bank_offset_to_address(bank_offset)
+		labels[address].add(label)
+	return labels
+
 
 def create_ret(pc):
 	global terminate
@@ -80,8 +102,11 @@ def create_call(pc, lo, hi, condition=None):
 def create_branch(op, target, condition=None):
 	global starting_points, labels
 	starting_points.add(target)
-	label = format_label(target)
-	labels[target].add(label)
+	if target in labels:
+		label = next(iter(labels[target]))
+	else:
+		label = format_label(target)
+		labels[target].add(label)
 	if condition:
 		return '%s %s, %s' % (op, condition, label)
 	return '%s %s' % (op, label)
@@ -523,17 +548,36 @@ gbhw_register_table = {
 }
 
 
+def usage_exit():
+	print('Usage: %s a.bin [a.sym] [entry_point]' % sys.argv[0], file=sys.stderr)
+	sys.exit(1)
+
 def main():
 	global starting_points, labels
-	if len(sys.argv) not in [2, 3]:
-		print('Usage: %s a.bin [entry_point]', file=sys.stderr)
-		sys.exit(1)
-	try:
-		entry_point = int(sys.argv[2], 16) if len(sys.argv) == 3 else 0
-		labels[entry_point].add('ENTRY_POINT')
-	except:
-		print('Invalid entry point: %r', sys.argv[3], file=sys.stderr)
-		sys.exit(1)
+
+	argc = len(sys.argv)
+	if argc < 2:
+		usage_exit()
+	bin_filename = sys.argv[1]
+	sym_filename = None
+	entry_point = 0x000000
+	if argc == 4:
+		sym_filename = sys.argv[2]
+		entry_point = int(sys.argv[3], 16)
+	elif argc == 3:
+		if set(sys.argv[2].lower()) - set('0123456789abcdef'):
+			sym_filename = sys.argv[2]
+		else:
+			entry_point = int(sys.argv[2], 16)
+	elif argc != 2:
+		usage_exit()
+
+	if sym_filename:
+		sym_labels = parse_symfile(sym_filename)
+		labels.update(sym_labels)
+
+	labels[entry_point].add('ENTRY_POINT')
+
 	disassemble(sys.argv[1], entry_point)
 
 if __name__ == '__main__':
